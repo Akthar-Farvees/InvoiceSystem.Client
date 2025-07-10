@@ -1,0 +1,113 @@
+.invoice-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 25px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.invoice-title {
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 28px;
+  border-bottom: 2px solid #014fa1;
+  padding-bottom: 5px;
+  color: #014fa1;
+}
+
+.customer-info p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.invoice-table thead tr {
+  background-color: rgb(237, 237, 237);
+  color: black;
+  text-align: center;
+}
+
+.invoice-table th,
+.invoice-table td {
+  padding: 12px 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.invoice-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.summary {
+  margin-top: 15px;
+  font-size: 16px;
+}
+
+.summary p {
+  margin: 5px 0;
+}
+
+.button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.print-btn {
+  background-color: rgb(2, 154, 2);
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.print-btn:hover {
+  background-color: rgb(22, 175, 22);
+}
+.back-btn {
+  background-color: #6c757d;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background-color: #5a6268;
+}
+
+
+/* Print styles */
+@media print {
+  .print-btn {
+    display: none;
+  }
+  body {
+    margin: 0;
+    background-color: #fff;
+  }
+  .invoice-container {
+    box-shadow: none;
+    border: none;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 12pt;
+  }
+}

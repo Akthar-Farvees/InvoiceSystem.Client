@@ -1,0 +1,43 @@
+<div *ngIf="invoice" class="invoice-container">
+  <button class="back-btn" (click)="goBack()">← Back</button>
+
+  <h2 class="invoice-title">Invoice #{{ invoice.invoiceId }}</h2>
+  
+  <div class="customer-info">
+    <p><strong>Customer:</strong> {{ invoice.customerName }}</p>
+    <p><strong>Email:</strong> {{ invoice.customerEmail }}</p>
+    <p><strong>Date:</strong> {{ invoice.transactionDate | date }}</p>
+  </div>
+
+  <table class="invoice-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Description</th>
+        <th>Qty</th>
+        <th>Unit Price</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of invoice.items">
+        <td>{{ item.productName }}</td>
+        <td>{{ item.productDescription }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.unitPrice | currency }}</td>
+        <td>{{ item.totalPrice | currency }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="summary">
+    <p><strong>Discount:</strong> {{ invoice.discount | currency }}</p>
+    <p><strong>Total Amount:</strong> {{ invoice.totalAmount | currency }}</p>
+    <p><strong>Balance:</strong> {{ invoice.balanceAmount | currency }}</p>
+  </div>
+
+  <div class="button-container">
+  <button class="print-btn" (click)="printInvoice()">Print</button>
+</div>
+
+</div>

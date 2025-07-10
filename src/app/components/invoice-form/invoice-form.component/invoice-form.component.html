@@ -1,0 +1,237 @@
+<div class="invoice-form-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Generate Customer Invoice</h2>
+    </div>
+    
+    <div class="card-body">
+      <form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Customer Information -->
+        <div class="form-section">
+          <h3>Customer Information</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="transactionDate">Transaction Date *</label>
+              <input 
+                type="date" 
+                id="transactionDate" 
+                class="form-control"
+                formControlName="transactionDate"
+                [class.is-invalid]="isFieldInvalid('transactionDate')">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('transactionDate')">
+                {{ getFieldError('transactionDate') }}
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="customerName">Customer Name *</label>
+              <input 
+                type="text" 
+                id="customerName" 
+                class="form-control"
+                formControlName="customerName"
+                [class.is-invalid]="isFieldInvalid('customerName')"
+                placeholder="Enter customer name">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('customerName')">
+                {{ getFieldError('customerName') }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="customerEmail">Customer Email</label>
+              <input 
+                type="email" 
+                id="customerEmail" 
+                class="form-control"
+                formControlName="customerEmail"
+                [class.is-invalid]="isFieldInvalid('customerEmail')"
+                placeholder="Enter customer email">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('customerEmail')">
+                {{ getFieldError('customerEmail') }}
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="customerPhone">Customer Phone</label>
+              <input 
+                type="tel" 
+                id="customerPhone" 
+                class="form-control"
+                formControlName="customerPhone"
+                [class.is-invalid]="isFieldInvalid('customerPhone')"
+                placeholder="Enter customer phone">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('customerPhone')">
+                {{ getFieldError('customerPhone') }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Invoice Items -->
+        <div class="form-section">
+          <div class="section-header">
+            <h3>Products</h3>
+            <button type="button" class="btn btn-secondary" (click)="addInvoiceItem()">
+              Add Item
+            </button>
+          </div>
+          
+          <div formArrayName="items">
+            <div 
+              *ngFor="let item of items.controls; let i = index" 
+              [formGroupName]="i" 
+              class="invoice-item">
+              
+              <div class="item-header">
+                <h4>Item {{ i + 1 }}</h4>
+                <button 
+                  type="button" 
+                  class="btn btn-danger btn-sm"
+                  (click)="removeInvoiceItem(i)"
+                  [disabled]="items.length === 1">
+                  Remove
+                </button>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label [for]="'productName-' + i">Product Name *</label>
+                  <input 
+                    type="text" 
+                    [id]="'productName-' + i"
+                    class="form-control"
+                    formControlName="productName"
+                    [class.is-invalid]="isItemFieldInvalid(i, 'productName')"
+                    placeholder="Enter product name">
+                  <div class="invalid-feedback" *ngIf="isItemFieldInvalid(i, 'productName')">
+                    {{ getItemFieldError(i, 'productName') }}
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label [for]="'productDescription-' + i">Description</label>
+                  <input 
+                    type="text" 
+                    [id]="'productDescription-' + i"
+                    class="form-control"
+                    formControlName="productDescription"
+                    [class.is-invalid]="isItemFieldInvalid(i, 'productDescription')"
+                    placeholder="Enter product description">
+                  <div class="invalid-feedback" *ngIf="isItemFieldInvalid(i, 'productDescription')">
+                    {{ getItemFieldError(i, 'productDescription') }}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="form-row">
+                <div class="form-group">
+                  <label [for]="'quantity-' + i">Quantity *</label>
+                  <input 
+                    type="number" 
+                    [id]="'quantity-' + i"
+                    class="form-control"
+                    formControlName="quantity"
+                    [class.is-invalid]="isItemFieldInvalid(i, 'quantity')"
+                    min="1"
+                    placeholder="Enter quantity">
+                  <div class="invalid-feedback" *ngIf="isItemFieldInvalid(i, 'quantity')">
+                    {{ getItemFieldError(i, 'quantity') }}
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label [for]="'unitPrice-' + i">Unit Price *</label>
+                  <input 
+                    type="number" 
+                    [id]="'unitPrice-' + i"
+                    class="form-control"
+                    formControlName="unitPrice"
+                    [class.is-invalid]="isItemFieldInvalid(i, 'unitPrice')"
+                    min="0.01"
+                    step="0.01"
+                    placeholder="Enter unit price">
+                  <div class="invalid-feedback" *ngIf="isItemFieldInvalid(i, 'unitPrice')">
+                    {{ getItemFieldError(i, 'unitPrice') }}
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label>Item Total</label>
+                  <div class="form-control-plaintext">
+                    ${{ calculateItemTotal(i) | number:'1.2-2' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Totals Section -->
+        <div class="form-section">
+          <h3>Invoice Totals</h3>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="discount">Discount Amount</label>
+              <input 
+                type="number" 
+                id="discount" 
+                class="form-control"
+                formControlName="discount"
+                [class.is-invalid]="isFieldInvalid('discount')"
+                min="0"
+                step="0.01"
+                placeholder="Enter discount amount">
+              <div class="invalid-feedback" *ngIf="isFieldInvalid('discount')">
+                {{ getFieldError('discount') }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="totals-summary">
+            <div class="total-row">
+              <span>Subtotal:</span>
+              <span>${{ calculateSubtotal() | number:'1.2-2' }}</span>
+            </div>
+            <div class="total-row">
+              <span>Discount:</span>
+              <span>-${{ (invoiceForm.get('discount')?.value || 0) | number:'1.2-2' }}</span>
+            </div>
+            <div class="total-row final-total">
+              <span>Total Amount:</span>
+              <span>${{ calculateTotal() | number:'1.2-2' }}</span>
+            </div>
+            <div class="total-row">
+              <span>Balance Amount:</span>
+              <span>${{ calculateTotal() | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn btn-primary"
+            [disabled]="isSubmitting || invoiceForm.invalid">
+            <span *ngIf="isSubmitting">Creating Invoice...</span>
+            <span *ngIf="!isSubmitting">Generate Invoice</span>
+          </button>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div class="alert alert-success" *ngIf="submitMessage">
+          {{ submitMessage }}
+        </div>
+        
+        <div class="alert alert-danger" *ngIf="submitError">
+          {{ submitError }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
