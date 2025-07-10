@@ -8,6 +8,11 @@ This is the frontend of an Invoice Management System built with Angular. It allo
 
 Follow the steps below to clone this repository and run the project on your local machine.
 
+> 🛠️ **Important:**  
+> First run `npm install` or `npm install --force` before you run `ng serve` the project.
+
+---
+
 ### ✅ Prerequisites
 
 Make sure you have the following installed:
